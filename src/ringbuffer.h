@@ -7,6 +7,7 @@
 #ifndef VCNC_RINGBUFFER_H
 #define VCNC_RINGBUFFER_H
 
+//TODOL rework it to use different algorithm
 template<typename ElementType, size_t Size>
 class RingBuffer {
     public:

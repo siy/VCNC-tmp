@@ -5,6 +5,7 @@
 #include "vec.h"
 #include "movingaverage.h"
 #include "parameters.h"
+#include "step_buffer.h"
 
 #ifndef VCNC_VCNC_TYPES_H
 #define VCNC_VCNC_TYPES_H
@@ -22,6 +23,6 @@ using FilterVector = Vec<MovingAverage<substep, FILTER_ORDER>, NUM_AXES>;
 
 using VelocityVectorQueue = RingBuffer<StepVector, VELOCITY_VECTOR_QUEUE_SIZE>;
 
-using StepBuffer = Vec<bitvector , STEP_BUFFER_SIZE>;
+using MainStepBuffer = StepBuffer<bitvector , STEP_BUFFER_SIZE>;
 
 #endif //VCNC_VCNC_TYPES_H

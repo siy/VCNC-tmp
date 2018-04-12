@@ -13,8 +13,8 @@
 
 template <typename ElementType, size_t Size>
 class Vec {
-        ElementType data[Size];
     public:
+        ElementType data[Size];
 
         using SelfType = Vec<ElementType, Size>;
 
@@ -118,50 +118,6 @@ class Vec {
             assert(idx < Size);
             return data[idx];
         }
-
-        template <typename T>
-        class Iterator {
-                T* data;
-            public:
-                explicit Iterator(T* ptr):data(ptr) {}
-
-                Iterator(const Iterator<T>& other) : data(other.data) {}
-
-                T* operator++() {
-                    return ++data;
-                }
-        };
-
-        inline Iterator<ElementType> begin() {
-            return Iterator<ElementType>(data);
-        }
-
-        inline Iterator<ElementType> end() {
-            return Iterator<ElementType>(data + Size);
-        }
-
-        inline Iterator<ElementType> mid() {
-            return Iterator<ElementType>(data + Size/2);
-        }
-
-        template <typename T>
-        class FlipFlopIteratorFactory {
-                bool flipFlop = false;
-                Iterator<T> begin;
-                Iterator<T> mid;
-                Iterator<T> end;
-
-            public:
-                explicit FlipFlopIteratorFactory(Vec<T, Size> vector):begin(vector.begin()), mid(vector.mid()), end(vector.end()) {}
-
-                using iterator_pair = std::pair<Iterator<T>, Iterator<T>>;
-
-                iterator_pair iterators() {
-                    flipFlop ^= true;
-
-                    return flipFlop ? iterator_pair(begin, mid) : iterator_pair(mid, end);
-                }
-        };
 
         template <typename T, size_t S>
         friend std::ostream& operator<< (std::ostream& os, const Vec<T, S>& vec);
