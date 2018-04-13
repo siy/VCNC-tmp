@@ -9,18 +9,18 @@
 #define VCNC_PARAMETERS_H
 
 constexpr size_t NUM_AXES = 3;
-constexpr size_t FILTER_ORDER = 64;
-constexpr size_t VELOCITY_VECTOR_QUEUE_SIZE = 1024; //1s of movements
-constexpr size_t STEP_BUFFER_SIZE = 1024;
+constexpr size_t FILTER_ORDER = 4;
+constexpr size_t VELOCITY_VECTOR_QUEUE_SIZE = 16; //1s of movements
+constexpr size_t STEP_BUFFER_SIZE = 16;
 
-constexpr size_t SUBSTEPS = 1024;
-constexpr size_t SUBSTEPS_MASK = SUBSTEPS - 1;
+//constexpr size_t SUBSTEPS = 1024;
+//constexpr size_t SUBSTEPS_MASK = SUBSTEPS - 1;
 
 class MachineParameters {
         float leadscrewPitch = 10.0;
         u_int16_t stepsPerPitch = 200;
         u_int16_t microsteps = 32;
-        u_int16_t substeps = 1024;
+        u_int16_t substeps = STEP_BUFFER_SIZE;
 
         float max_feed = 100.0; //mm/s
         float max_free_feed = 200.0; //mm/s

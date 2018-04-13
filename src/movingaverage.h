@@ -21,7 +21,7 @@ class MovingAverage {
 
         ~MovingAverage() = default;
 
-        ElementType next(const ElementType element) {
+        ElementType next(ElementType const element) {
             auto old = buffer.get();
             buffer.put(element);
             accumulator -= old;

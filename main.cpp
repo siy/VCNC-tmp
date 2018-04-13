@@ -15,6 +15,10 @@ void testVectorScaling();
 
 void testMovingAverage2();
 
+void testStepBuffer();
+
+void testRingBuffer();
+
 int main() {
     //testMovingAverage1();
 
@@ -22,6 +26,63 @@ int main() {
 
     //testMovingAverage2();
 
+    //testStepBuffer();
+
+    //testRingBuffer();
+
+    StepMachine stepMachine;
+
+    stepMachine.put(RawVelocityVector(0.1, 0.1, 0.1));
+    stepMachine.put(RawVelocityVector(0.1, 0.1, 0.1));
+    stepMachine.put(RawVelocityVector(0.1, 0.1, 0.1));
+    stepMachine.put(RawVelocityVector(0.1, 0.1, 0.1));
+
+    MainStepBuffer buffer;
+    MainStepBufferIteratorFactory factory(buffer);
+    stepMachine.generateNextMove(factory.create());
+
+    return 0;
+}
+
+void testRingBuffer() {
+    RingBuffer<int, 4> buffer;
+
+    std::cout << "Is full: " << buffer.full() << ", is empty: " << buffer.empty() << ", count: " << buffer.count() << std::endl;
+
+    buffer.put(1);
+
+    std::cout << "Is full: " << buffer.full() << ", is empty: " << buffer.empty() << ", count: " << buffer.count() << std::endl;
+
+    buffer.put(2);
+
+    std::cout << "Is full: " << buffer.full() << ", is empty: " << buffer.empty() << ", count: " << buffer.count() << std::endl;
+
+    buffer.put(3);
+
+    std::cout << "Is full: " << buffer.full() << ", is empty: " << buffer.empty() << ", count: " << buffer.count() << std::endl;
+
+    buffer.put(4);
+
+    std::cout << "Is full: " << buffer.full() << ", is empty: " << buffer.empty() << ", count: " << buffer.count() << std::endl;
+
+    auto val = buffer.get();
+
+    std::cout << "Is full: " << buffer.full() << ", is empty: " << buffer.empty() << ", count: " << buffer.count() << ", value:" << val << std::endl;
+
+    val = buffer.get();
+
+    std::cout << "Is full: " << buffer.full() << ", is empty: " << buffer.empty() << ", count: " << buffer.count() << ", value:" << val << std::endl;
+
+    val = buffer.get();
+
+    std::cout << "Is full: " << buffer.full() << ", is empty: " << buffer.empty() << ", count: " << buffer.count() << ", value:" << val << std::endl;
+
+    val = buffer.get();
+
+    std::cout << "Is full: " << buffer.full() << ", is empty: " << buffer.empty() << ", count: " << buffer.count() << ", value:" << val << std::endl;
+}
+
+void testStepBuffer() {
     StepBuffer<u_int16_t, 8> buffer;
     auto factory = buffer.factory();
 
@@ -38,8 +99,6 @@ int main() {
     }
 
     std::cout << buffer << std::endl;
-
-    return 0;
 }
 
 void testMovingAverage2() {

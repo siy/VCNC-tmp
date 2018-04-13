@@ -32,8 +32,12 @@ class StepBuffer {
                     return result;
                 }
 
-                const size_t len() {
+                size_t len() const {
                     return size;
+                }
+
+                bool hasNext() const {
+                    return size > 0;
                 }
         };
 
