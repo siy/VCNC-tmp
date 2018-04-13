@@ -12,8 +12,16 @@
 
 template <typename ElementType, size_t Size>
 class StepBuffer {
-        ElementType data[Size] = {};
+        //Step buffer contains 2 halves, each of Size size and for each step there is accompanying step reset
+        constexpr static const int SCALER = 4;
+        constexpr static const int HALF_SCALER = 2;
+
+        ElementType data[Size * SCALER] = {};
     public:
+
+        constexpr size_t size() const {
+            return Size * SCALER;
+        }
 
         template <typename T>
         class Iterator {
@@ -42,11 +50,11 @@ class StepBuffer {
         };
 
         inline Iterator<ElementType> firstHalf() {
-            return Iterator<ElementType>(data, Size/2);
+            return Iterator<ElementType>(data, size()/2);
         }
 
         inline Iterator<ElementType> secondHalf() {
-            return Iterator<ElementType>(data + Size/2, Size/2);
+            return Iterator<ElementType>(data + size()/2 , size()/2);
         }
 
         template <typename T, size_t Sz>

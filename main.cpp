@@ -32,13 +32,15 @@ int main() {
 
     StepMachine stepMachine;
 
-    stepMachine.put(RawVelocityVector(0.1, 0.1, 0.1));
-    stepMachine.put(RawVelocityVector(0.1, 0.1, 0.1));
-    stepMachine.put(RawVelocityVector(0.1, 0.1, 0.1));
-    stepMachine.put(RawVelocityVector(0.1, 0.1, 0.1));
-
     MainStepBuffer buffer;
     MainStepBufferIteratorFactory factory(buffer);
+
+    stepMachine.put(RawVelocityVector(1));
+    stepMachine.put(RawVelocityVector(2));
+    stepMachine.put(RawVelocityVector(3));
+    stepMachine.put(RawVelocityVector(4));
+    stepMachine.generateNextMove(factory.create());
+    stepMachine.generateNextMove(factory.create());
     stepMachine.generateNextMove(factory.create());
 
     return 0;

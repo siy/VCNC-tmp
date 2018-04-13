@@ -15,7 +15,8 @@ class StepMachine {
         VectorFilter filter;
         VelocityVectorQueue queue;
 
-        StepVector counter;
+        StepVector current_speed;
+        StepVector step_counter;
 
         StepVector get() {
             return queue.empty() ? ZeroVector : queue.get();
@@ -33,27 +34,39 @@ class StepMachine {
                 return false;
             }
 
-            StepVector vector(move, Parameters.scale());
+            RawVelocityVector tmp = move;
+
+            StepVector vector(tmp, Parameters.scale());
             queue.put(vector);
             return true;
         }
 
         void generateNextMove(MainStepBufferIterator iterator) {
-            StepVector current_speed = filter.prev();
             StepVector next_speed = filter.next(get());
-            StepVector delta_speed(next_speed);
+            StepVector delta_speed = next_speed;
             delta_speed -= current_speed;
+            delta_speed >>= STEP_BUFFER_SIZE_POWER;
 
+            std::cout << "Next speed " << next_speed << std::endl;
+            std::cout << "Current speed " << current_speed << std::endl;
+            std::cout << "Speed delta " << delta_speed << std::endl;
+
+            int step_cnt = 0;
             while (iterator.hasNext()) {
-                current_speed += current_speed;
                 current_speed += delta_speed;
-                delta_speed += delta_speed;
+                step_counter += current_speed;
+                size_t full_steps = step_counter.step_and_reset(SUBSTEPS_MASK);
 
-                std::cout << "Current speed: " << current_speed << std::endl;
+                if(full_steps) {
+                    step_cnt++;
+                }
 
                 *iterator++ = 0;
                 *iterator++ = 0;
             }
+
+            std::cout << "total steps by X: " << step_cnt << std::endl;
+            std::cout << "Current speed " << current_speed << std::endl;
         }
 };
 

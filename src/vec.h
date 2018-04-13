@@ -13,6 +13,7 @@
 
 template <typename ElementType, size_t Size>
 class Vec {
+        static_assert(Size < std::numeric_limits<size_t>::digits, "Vector size cannot exceed size of size_t in bits");
     public:
         ElementType data[Size];
 
@@ -80,6 +81,22 @@ class Vec {
             return *this;
         }
 
+        template <typename T>
+        Vec& operator>>= (const T count) {
+            for (int i = 0; i < Size; ++i) {
+                data[i] >>= count;
+            }
+            return *this;
+        }
+
+        template <typename T>
+        Vec& operator&= (const T mask) {
+            for (int i = 0; i < Size; ++i) {
+                data[i] &= mask;
+            }
+            return *this;
+        }
+
         SelfType operator/ (const SelfType other) {
             SelfType result(*this);
             for (int i = 0; i < Size; ++i) {
@@ -117,6 +134,19 @@ class Vec {
         const ElementType& operator[](int idx) {
             assert(idx < Size);
             return data[idx];
+        }
+
+        size_t step_and_reset(size_t mask) {
+            size_t result = 0;
+
+            for (int i = 0; i < Size; ++i) {
+                if (data[i] & ~mask) {
+                    result |= 1;
+                    data[i] &= mask;
+                }
+                result <<= 1;
+            }
+            return result;
         }
 
         template <typename T, size_t S>
