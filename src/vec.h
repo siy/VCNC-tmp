@@ -141,10 +141,10 @@ class Vec {
 
             for (int i = 0; i < Size; ++i) {
                 if (data[i] & ~mask) {
-                    result |= 1;
+                    result |= 1u;
                     data[i] &= mask;
                 }
-                result <<= 1;
+                result <<= 1u;
             }
             return result;
         }
