@@ -1,49 +1,49 @@
 //
-// Created by siy on 4/8/18.
+// Created by siy on 4/14/18.
 //
 
-#ifndef VCNC_INTERPOLATOR_H
-#define VCNC_INTERPOLATOR_H
-
 #include "vcnc_types.h"
-
 #include <iostream>
 
-class StepMachine {
-        StepVector const ZeroVector;
+#ifndef VCNC_MAIN_STEP_MACHINE_H
+#define VCNC_MAIN_STEP_MACHINE_H
 
-        VectorFilter filter;
-        VelocityVectorQueue queue;
+class step_machine {
+        step_vector const ZeroVector;
 
-        StepVector current_speed;
-        StepVector step_counter;
+        step_vector_filter filter;
+        step_vector_queue queue;
 
-        StepVector get() {
+        step_vector current_speed;
+        step_vector step_counter;
+
+        step_vector get() {
             return queue.empty() ? ZeroVector : queue.get();
         }
 
     public:
-        StepMachine() = default;
+        step_machine() = default;
 
-        inline bool hasSpace() {
+        inline bool has_space() {
             return queue.empty();
         }
 
-        bool put(RawVelocityVector&& move) {
+        bool put(velocity_vector&& move) {
             if (queue.full()) {
                 return false;
             }
 
-            RawVelocityVector tmp = move;
-
-            StepVector vector(tmp, Parameters.scale());
+            step_vector vector(move, Parameters.scale());
             queue.put(vector);
             return true;
         }
 
-        void generateNextMove(MainStepBufferIterator iterator) {
-            StepVector next_speed = filter.next(get());
-            StepVector delta_speed = next_speed;
+        void generate_next_move(main_step_buffer_iterator iterator) {
+            step_vector next_speed = filter.next(get());
+
+            size_t signs = next_speed.abs();
+
+            step_vector delta_speed = next_speed;
             delta_speed -= current_speed;
             delta_speed >>= STEP_BUFFER_SIZE_POWER;
 
@@ -70,4 +70,4 @@ class StepMachine {
         }
 };
 
-#endif //VCNC_INTERPOLATOR_H
+#endif //VCNC_MAIN_STEP_MACHINE_H

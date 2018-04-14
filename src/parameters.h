@@ -8,75 +8,70 @@
 #ifndef VCNC_PARAMETERS_H
 #define VCNC_PARAMETERS_H
 
-constexpr float const INTERPOLATION_INTERVAL = 1e-3; //1ms
 constexpr size_t const NUM_AXES = 3;
 constexpr size_t const FILTER_ORDER = 4;
-constexpr size_t const VELOCITY_VECTOR_QUEUE_SIZE = 16; //1s of movements
+constexpr size_t const VELOCITY_VECTOR_QUEUE_SIZE = 16;
+
 constexpr size_t const STEP_BUFFER_SIZE_POWER = 4;
 constexpr size_t const STEP_BUFFER_SIZE = 1u << STEP_BUFFER_SIZE_POWER;
-constexpr size_t const STEP_BUFFER_SIZE_MASK = STEP_BUFFER_SIZE - 1;
+
 constexpr size_t const SUBSTEPS_POWER = 10;
 constexpr size_t const SUBSTEPS = 1u << SUBSTEPS_POWER;
 constexpr size_t const SUBSTEPS_MASK = SUBSTEPS - 1;
 
-//constexpr size_t SUBSTEPS = 1024;
-//constexpr size_t SUBSTEPS_MASK = SUBSTEPS - 1;
-
-class MachineParameters {
-        float leadscrewPitch = 10.0;
-        u_int16_t stepsPerPitch = 200;
+class machine_parameters {
+        float leadscrew_pitch = 10.0;
+        u_int16_t steps_per_pitch = 200;
         u_int16_t microsteps = 32;
 
-        float max_feed = 100.0; //mm/s
-        float max_free_feed = 200.0; //mm/s
-        float max_accel = 500.0; //mm/s^2
+        float _max_feed = 100.0; //mm/s
+        float _max_free_feed = 200.0; //mm/s
+        float _max_accel = 500.0; //mm/s^2
 
-        int32_t scaleFactor = 0;
+        int32_t scale_factor = 0;
 
-        MachineParameters& recalculate_scale_factor() {
-            double tmp = stepsPerPitch;
-            tmp *= microsteps;
-            //tmp *= SUBSTEPS;
+        machine_parameters& recalculate_scale_factor() {
+            double tmp = 1.0f * steps_per_pitch * microsteps;
 
-            scaleFactor = int32_t(tmp/leadscrewPitch);
+            scale_factor = int32_t(tmp/leadscrew_pitch);
             return *this;
         }
 
     public:
 
-        MachineParameters() noexcept {
+        machine_parameters() noexcept {
             recalculate_scale_factor();
         }
 
-        MachineParameters& setPitch(float newPitch) {
-            leadscrewPitch = newPitch;
+        machine_parameters& set_pitch(float _pitch) {
+            leadscrew_pitch = _pitch;
             return recalculate_scale_factor();
         }
 
         int32_t scale() const {
-            return scaleFactor;
+            return scale_factor;
         }
 
-        float maxFeed() const {
-            return max_feed;
+        float max_feed() const {
+            return _max_feed;
         }
 
-        float maxFreeFeed() const {
-            return max_free_feed;
+        float max_free_feed() const {
+            return _max_free_feed;
         }
 
-        float maxAcceleration() const {
-            return max_accel;
+        float max_acceleration() const {
+            return _max_accel;
         }
 
-        float mmPerStep() {
-            double tmp = leadscrewPitch / (stepsPerPitch * microsteps);
+        float mm_per_step() {
+            double tmp = leadscrew_pitch / (steps_per_pitch * microsteps);
 
             return float(tmp);
         }
 
 };
 
-extern MachineParameters Parameters;
+extern machine_parameters Parameters;
 
 #endif //VCNC_PARAMETERS_H

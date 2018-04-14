@@ -9,17 +9,17 @@
 #define VCNC_MOVINGAVERAGE_H
 
 template <typename ElementType, size_t Size>
-class MovingAverage {
-        RingBuffer<ElementType,Size> buffer;
+class moving_average {
+        ring_buffer<ElementType,Size> buffer;
         ElementType accumulator;
         ElementType last_value;
     public:
 
-        MovingAverage():accumulator(ElementType(0)),last_value(ElementType(0)) {
+        moving_average():accumulator(ElementType(0)),last_value(ElementType(0)) {
             buffer.reset(ElementType(0), Size);
         }
 
-        ~MovingAverage() = default;
+        ~moving_average() = default;
 
         ElementType next(ElementType const element) {
             auto old = buffer.get();

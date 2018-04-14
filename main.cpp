@@ -1,12 +1,12 @@
 #include <iostream>
 
 #include "src/vcnc_types.h"
-#include "src/interpolator.h"
+#include "src/step_machine.h"
 //---------------------------------------------------------------------
 // Global variables
 //---------------------------------------------------------------------
 
-MachineParameters Parameters;
+machine_parameters Parameters;
 
 
 void testMovingAverage1();
@@ -30,24 +30,44 @@ int main() {
 
     //testRingBuffer();
 
-    StepMachine stepMachine;
+    step_machine stepMachine;
 
-    MainStepBuffer buffer;
-    MainStepBufferIteratorFactory factory(buffer);
+    main_step_buffer buffer;
+    main_step_buffer_iterator_factory factory(buffer);
 
-    stepMachine.put(RawVelocityVector(1));
-    stepMachine.put(RawVelocityVector(2));
-    stepMachine.put(RawVelocityVector(3));
-    stepMachine.put(RawVelocityVector(4));
-    stepMachine.generateNextMove(factory.create());
-    stepMachine.generateNextMove(factory.create());
-    stepMachine.generateNextMove(factory.create());
+    stepMachine.put(velocity_vector(1.0, 2.0, 3.0));
+    stepMachine.put(velocity_vector(2.0, 3.0, 4.0));
+    stepMachine.put(velocity_vector(3.0, 4.0, 5.0));
+    stepMachine.put(velocity_vector(4.0, 5.0, 6.0));
+    stepMachine.put(velocity_vector(4.0, 5.0, 6.0));
+    stepMachine.put(velocity_vector(4.0, 5.0, 6.0));
+    stepMachine.put(velocity_vector(4.0, 5.0, 6.0));
+    stepMachine.put(velocity_vector(4.0, 5.0, 6.0));
+    stepMachine.put(velocity_vector(3.0, 4.0, 5.0));
+    stepMachine.put(velocity_vector(2.0, 3.0, 4.0));
+    stepMachine.put(velocity_vector(1.0, 2.0, 3.0));
+    stepMachine.generate_next_move(factory.create());
+    stepMachine.generate_next_move(factory.create());
+    stepMachine.generate_next_move(factory.create());
+    stepMachine.generate_next_move(factory.create());
+    stepMachine.generate_next_move(factory.create());
+    stepMachine.generate_next_move(factory.create());
+    stepMachine.generate_next_move(factory.create());
+    stepMachine.generate_next_move(factory.create());
+    stepMachine.generate_next_move(factory.create());
+    stepMachine.generate_next_move(factory.create());
+    stepMachine.generate_next_move(factory.create());
+    stepMachine.generate_next_move(factory.create());
+    stepMachine.generate_next_move(factory.create());
+    stepMachine.generate_next_move(factory.create());
+    stepMachine.generate_next_move(factory.create());
+    stepMachine.generate_next_move(factory.create());
 
     return 0;
 }
 
 void testRingBuffer() {
-    RingBuffer<int, 4> buffer;
+    ring_buffer<int, 4> buffer;
 
     std::cout << "Is full: " << buffer.full() << ", is empty: " << buffer.empty() << ", count: " << buffer.count() << std::endl;
 
@@ -85,7 +105,7 @@ void testRingBuffer() {
 }
 
 void testStepBuffer() {
-    StepBuffer<u_int16_t, 8> buffer;
+    step_buffer<u_int16_t, 8> buffer;
     auto factory = buffer.factory();
 
     auto iter1 = factory.create();
@@ -104,19 +124,19 @@ void testStepBuffer() {
 }
 
 void testMovingAverage2() {
-    MovingAverage<Vec<double , 2>, 4> vecMa;
+    moving_average<short_vector<double , 2>, 4> vecMa;
 
-    std::cout << vecMa.next(Vec<double, 2>(1.0, 1.0)) << std::endl;
-    std::cout << vecMa.next(Vec<double, 2>(1.0, 1.0)) << std::endl;
-    std::cout << vecMa.next(Vec<double, 2>(1.0, 1.0)) << std::endl;
-    std::cout << vecMa.next(Vec<double, 2>(1.0, 1.0)) << std::endl;
-    std::cout << vecMa.next(Vec<double, 2>(1.0, 1.0)) << std::endl;
+    std::cout << vecMa.next(short_vector<double, 2>(1.0, 1.0)) << std::endl;
+    std::cout << vecMa.next(short_vector<double, 2>(1.0, 1.0)) << std::endl;
+    std::cout << vecMa.next(short_vector<double, 2>(1.0, 1.0)) << std::endl;
+    std::cout << vecMa.next(short_vector<double, 2>(1.0, 1.0)) << std::endl;
+    std::cout << vecMa.next(short_vector<double, 2>(1.0, 1.0)) << std::endl;
 }
 
 void testVectorScaling() {
     std::cout << "Scale factor " << Parameters.scale() << std::endl;
 
-    Vec<double, NUM_AXES> vector(1.0, 2.0, 4.0);
+    short_vector<double, NUM_AXES> vector(1.0, 2.0, 4.0);
 
     std::cout << "Original vector:" << vector << std::endl;
 
@@ -126,7 +146,7 @@ void testVectorScaling() {
 }
 
 void testMovingAverage1() {
-    MovingAverage<double, 64> ma;
+    moving_average<double, 64> ma;
 
     for(int i = 0; i < 64; i++) {
         std::cout << i << "," << ma.next(i * 0.1) << std::endl;

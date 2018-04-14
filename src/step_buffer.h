@@ -11,7 +11,7 @@
 #define VCNC_MAIN_STEP_BUFFER_H
 
 template <typename ElementType, size_t Size>
-class StepBuffer {
+class step_buffer {
         //Step buffer contains 2 halves, each of Size size and for each step there is accompanying step reset
         constexpr static const int SCALER = 4;
         constexpr static const int HALF_SCALER = 2;
@@ -24,13 +24,13 @@ class StepBuffer {
         }
 
         template <typename T>
-        class Iterator {
+        class iterator {
                 T* data;
                 size_t size;
             public:
-                explicit Iterator(T* ptr, size_t count):data(ptr),size(count) {}
+                explicit iterator(T* ptr, size_t count):data(ptr),size(count) {}
 
-                Iterator(const Iterator<T>& other) : data(other.data),size(other.size) {}
+                iterator(const iterator<T>& other) : data(other.data),size(other.size) {}
 
                 T* operator++(int) {
                     assert(size > 0);
@@ -49,39 +49,39 @@ class StepBuffer {
                 }
         };
 
-        inline Iterator<ElementType> firstHalf() {
-            return Iterator<ElementType>(data, size()/2);
+        inline iterator<ElementType> firstHalf() {
+            return iterator<ElementType>(data, size()/2);
         }
 
-        inline Iterator<ElementType> secondHalf() {
-            return Iterator<ElementType>(data + size()/2 , size()/2);
+        inline iterator<ElementType> secondHalf() {
+            return iterator<ElementType>(data + size()/2 , size()/2);
         }
 
         template <typename T, size_t Sz>
-        class IteratorFactory {
-                using IterableBuffer = StepBuffer<T, Sz>;
+        class iterator_factory {
+                using IterableBuffer = step_buffer<T, Sz>;
 
                 bool flipFlop = false;
                 IterableBuffer& buffer;
             public:
-                explicit IteratorFactory(IterableBuffer& source):buffer(source) {}
+                explicit iterator_factory(IterableBuffer& source):buffer(source) {}
 
-                Iterator<T> create() {
+                iterator<T> create() {
                     flipFlop = !flipFlop;
                     return flipFlop ? buffer.firstHalf() : buffer.secondHalf();
                 }
         };
 
-        IteratorFactory<ElementType, Size> factory() {
-            return IteratorFactory<ElementType, Size>(*this);
+        iterator_factory<ElementType, Size> factory() {
+            return iterator_factory<ElementType, Size>(*this);
         };
 
         template <typename T, size_t S>
-        friend std::ostream& operator<< (std::ostream& os, const StepBuffer<T, S>& buffer);
+        friend std::ostream& operator<< (std::ostream& os, const step_buffer<T, S>& buffer);
 };
 
 template <typename T, size_t Size>
-std::ostream& operator<< (std::ostream& os, const StepBuffer<T, Size>& buffer) {
+std::ostream& operator<< (std::ostream& os, const step_buffer<T, Size>& buffer) {
     os << "<" << std::hex ;
     for(T value: buffer.data) {
         os  << "0x" << std::setfill('0') << std::setw(8) << value << ", ";

@@ -7,9 +7,8 @@
 #ifndef VCNC_RINGBUFFER_H
 #define VCNC_RINGBUFFER_H
 
-//TODOL rework it to use different algorithm
 template<typename ElementType, size_t Size>
-class RingBuffer {
+class ring_buffer {
         static_assert((Size & (Size -1)) == 0, "Size must be power of 2");
 
         constexpr static size_t MASK = Size - 1;
@@ -19,10 +18,10 @@ class RingBuffer {
 
         ElementType data[Size];
     public:
-        RingBuffer():read_index(0), write_index(0) {
+        ring_buffer():read_index(0), write_index(0) {
         }
 
-        RingBuffer& reset(ElementType value = 0, size_t num_prefill = Size) {
+        ring_buffer& reset(ElementType value = 0, size_t num_prefill = Size) {
             read_index = write_index = 0;
 
             for(size_t idx = 0; idx < num_prefill; idx++) {
@@ -32,7 +31,7 @@ class RingBuffer {
             return *this;
         }
 
-        RingBuffer& put(ElementType element) {
+        ring_buffer& put(ElementType element) {
             assert(!full());
 
             data[write_index++ & MASK] = element;
