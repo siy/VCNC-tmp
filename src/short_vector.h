@@ -7,6 +7,7 @@
 #include <cassert>
 #include <algorithm>
 #include <iostream>
+#include "bitmixer.h"
 
 #ifndef VCNC_VEC_H
 #define VCNC_VEC_H
@@ -136,30 +137,21 @@ class short_vector {
             return data[idx];
         }
 
-        size_t step_and_reset(size_t mask) {
-            size_t result = 0;
-
+        template <typename T, bit_name ... Bits>
+        bitmixer::bit_collector<T, Bits...>& step_and_reset(size_t mask, bitmixer::bit_collector<T, Bits...>& collector) {
             for (int i = 0; i < Size; ++i) {
-                if (data[i] & ~mask) {
-                    result |= 1u;
-                    data[i] &= mask;
-                }
-                result <<= 1u;
+                collector.add(data[i] & ~mask);
+                data[i] &= mask;
             }
-            return result;
+            return collector;
         }
 
-        size_t abs() {
-            size_t result = 0;
-
+        template <typename T, bit_name ... Bits>
+        void abs(bitmixer::bit_collector<T, Bits...>& collector) {
             for (int i = 0; i < Size; ++i) {
-                if (data[i] < 0) {
-                    result |= 1u;
-                    data[i] = std::abs(data[i]);
-                }
-                result <<= 1u;
+                collector.add(data[i] < 0);
+                data[i] = std::abs(data[i]);
             }
-            return result;
         }
 
         template <typename T, size_t S>

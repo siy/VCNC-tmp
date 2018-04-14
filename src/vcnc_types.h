@@ -6,6 +6,7 @@
 #include "movingaverage.h"
 #include "parameters.h"
 #include "step_buffer.h"
+#include "bitmixer.h"
 
 #ifndef VCNC_VCNC_TYPES_H
 #define VCNC_VCNC_TYPES_H
@@ -24,4 +25,13 @@ using main_step_buffer = step_buffer<bitvector , STEP_BUFFER_SIZE>;
 using main_step_buffer_iterator = main_step_buffer::iterator<bitvector>;
 using main_step_buffer_iterator_factory = main_step_buffer::iterator_factory<bitvector, STEP_BUFFER_SIZE>;
 
+//Mapping of logical step/dir/pwm bits into physical bit positions.
+// Bits are added in following order:
+// Dir X, Dir Y, Dir Z
+// Step X, Step Y, Step Z
+// Pwm 1, Pwm 2
+// Listed bits specify actual physical positions of corresponding logical signals
+using step_bit_collector = bitmixer::bit_collector<bitvector, Bit1, Bit3, Bit5, Bit0, Bit2, Bit4, Bit6, Bit7>;
+// Listed bits must be the same as for declaration above for step bits, i.e. copy of first NUM_AXIS elements.
+constexpr const bitvector step_bit_mask = bitmixer::bit_reset_t<bitvector, Bit1, Bit3, Bit5>::mask;
 #endif //VCNC_VCNC_TYPES_H

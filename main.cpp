@@ -22,6 +22,8 @@ void testRingBuffer();
 
 void testStepMachine();
 
+void testBitMixer();
+
 int main() {
     //testMovingAverage1();
 
@@ -33,30 +35,9 @@ int main() {
 
     //testRingBuffer();
 
-    //testStepMachine();
+    testStepMachine();
 
-    //u_int16_t mask = ;
-
-    std::cout << "Extract mask: 0x" << std::setfill('0') << std::setw(4) << std::hex << bitmixer::bit_set<Bit0>::mask << std::endl;
-    std::cout << "Reset mask: 0x" << std::setfill('0') << std::setw(4) << std::hex << bitmixer::bit_reset<Bit0>::mask << std::endl;
-    std::cout << "Extract mask: 0x" << std::setfill('0') << std::setw(4) << std::hex << bitmixer::bit_set<Bit2>::mask << std::endl;
-    std::cout << "Reset mask: 0x" << std::setfill('0') << std::setw(4) << std::hex << bitmixer::bit_reset<Bit2>::mask << std::endl;
-    std::cout << "Extract mask: 0x" << std::setfill('0') << std::setw(4) << std::hex << bitmixer::bit_set<Bit3, Bit0>::mask << std::endl;
-    std::cout << "Reset mask: 0x" << std::setfill('0') << std::setw(4) << std::hex << bitmixer::bit_reset<Bit3, Bit0>::mask << std::endl;
-    std::cout << "Extract mask: 0x" << std::setfill('0') << std::setw(4) << std::hex << bitmixer::bit_set<Bit15, Bit7, Bit0, Bit6>::mask << std::endl;
-    std::cout << "Reset mask: 0x" << std::setfill('0') << std::setw(4) << std::hex << bitmixer::bit_reset<Bit15, Bit7, Bit0, Bit6>::mask << std::endl;
-
-    bitmixer::bit_collector<u_int16_t, Bit15, Bit7, Bit0, Bit6> collector;
-
-    std::cout << "Value: 0x" << std::setfill('0') << std::setw(4) << std::hex << collector.value() << std::endl;
-    collector.add(1);
-    std::cout << "Value: 0x" << std::setfill('0') << std::setw(4) << std::hex << collector.value() << std::endl;
-    collector.add(1);
-    std::cout << "Value: 0x" << std::setfill('0') << std::setw(4) << std::hex << collector.value() << std::endl;
-    collector.add(1);
-    std::cout << "Value: 0x" << std::setfill('0') << std::setw(4) << std::hex << collector.value() << std::endl;
-    collector.add(1);
-    std::cout << "Value: 0x" << std::setfill('0') << std::setw(4) << std::hex << collector.value() << std::endl;
+    //testBitMixer();
 
     return 0;
 }
@@ -94,6 +75,29 @@ void testStepMachine() {
     stepMachine.generate_next_move(factory.create());
     stepMachine.generate_next_move(factory.create());
     stepMachine.generate_next_move(factory.create());
+}
+
+void testBitMixer() {
+    std::cout << "Extract mask: 0x" << std::setfill('0') << std::setw(4) << std::hex << bitmixer::bit_set<Bit0>::mask << std::endl;
+    std::cout << "Reset mask: 0x" << std::setfill('0') << std::setw(4) << std::hex << bitmixer::bit_reset<Bit0>::mask << std::endl;
+    std::cout << "Extract mask: 0x" << std::setfill('0') << std::setw(4) << std::hex << bitmixer::bit_set<Bit2>::mask << std::endl;
+    std::cout << "Reset mask: 0x" << std::setfill('0') << std::setw(4) << std::hex << bitmixer::bit_reset<Bit2>::mask << std::endl;
+    std::cout << "Extract mask: 0x" << std::setfill('0') << std::setw(4) << std::hex << bitmixer::bit_set<Bit3, Bit0>::mask << std::endl;
+    std::cout << "Reset mask: 0x" << std::setfill('0') << std::setw(4) << std::hex << bitmixer::bit_reset<Bit3, Bit0>::mask << std::endl;
+    std::cout << "Extract mask: 0x" << std::setfill('0') << std::setw(4) << std::hex << bitmixer::bit_set<Bit15, Bit7, Bit0, Bit6>::mask << std::endl;
+    std::cout << "Reset mask: 0x" << std::setfill('0') << std::setw(4) << std::hex << bitmixer::bit_reset<Bit15, Bit7, Bit0, Bit6>::mask << std::endl;
+
+    bitmixer::bit_collector<u_int16_t, Bit15, Bit7, Bit0, Bit6> collector;
+
+    std::cout << "Value: 0x" << std::setfill('0') << std::setw(4) << std::hex << collector.value() << std::endl;
+    collector.add(1);
+    std::cout << "Value: 0x" << std::setfill('0') << std::setw(4) << std::hex << collector.value() << std::endl;
+    collector.add(1);
+    std::cout << "Value: 0x" << std::setfill('0') << std::setw(4) << std::hex << collector.value() << std::endl;
+    collector.add(1);
+    std::cout << "Value: 0x" << std::setfill('0') << std::setw(4) << std::hex << collector.value() << std::endl;
+    collector.add(1);
+    std::cout << "Value: 0x" << std::setfill('0') << std::setw(4) << std::hex << collector.value() << std::endl;
 }
 
 void testRingBuffer() {

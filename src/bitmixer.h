@@ -3,6 +3,7 @@
 //
 
 #include "bitnames.h"
+#include <algorithm>
 
 #ifndef VCNC_MAIN_BITMIXER_H
 #define VCNC_MAIN_BITMIXER_H
@@ -28,13 +29,19 @@ namespace bitmixer {
         constexpr static T mask = bit_set<Bits...>::mask;
     };
 
+    template <typename T, bit_name... Bits>
+    struct bit_reset_t {
+        constexpr static T mask = ~bit_set_t<T, Bits...>::mask;
+    };
+
     template <typename T, bit_name ... Bits>
     class bit_collector {
             T result;
-            u_int16_t const bits[sizeof...(Bits)];
+            T const bits[sizeof...(Bits)] = {bit_set_t<T, Bits>::mask...};
             int index;
         public:
-            bit_collector():result(0),index(0),bits{bit_set_t<u_int16_t, Bits>::mask...} {}
+            bit_collector():result(0),index(0) {}
+
             ~bit_collector() = default;
 
             bit_collector& add(int bit) {
@@ -45,7 +52,23 @@ namespace bitmixer {
                 return *this;
             }
 
+//            template <typename T, size_t Len>
+//            bit_collector& add(T value) {
+//                using mask = bit_set_t<T, bit_name(Len)>;
+//                auto bit_mask = mask::mask;
+//                while (bit_mask) {
+//                    add(value & bit_mask);
+//                    bit_mask >>= 1;
+//                }
+//            }
+
             T value () const {
+                return result;
+            }
+
+            T reset(const int start, const T mask) {
+                result &= mask;
+                index = start;
                 return result;
             }
     };
