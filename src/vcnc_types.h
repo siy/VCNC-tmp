@@ -2,7 +2,7 @@
 // Created by siy on 4/8/18.
 //
 
-#include "vec.h"
+#include "short_vector.h"
 #include "movingaverage.h"
 #include "parameters.h"
 #include "step_buffer.h"

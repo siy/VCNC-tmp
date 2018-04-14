@@ -2,6 +2,7 @@
 
 #include "src/vcnc_types.h"
 #include "src/step_machine.h"
+#include "src/bitmixer.h"
 //---------------------------------------------------------------------
 // Global variables
 //---------------------------------------------------------------------
@@ -19,6 +20,8 @@ void testStepBuffer();
 
 void testRingBuffer();
 
+void testStepMachine();
+
 int main() {
     //testMovingAverage1();
 
@@ -30,22 +33,51 @@ int main() {
 
     //testRingBuffer();
 
+    //testStepMachine();
+
+    //u_int16_t mask = ;
+
+    std::cout << "Extract mask: 0x" << std::setfill('0') << std::setw(4) << std::hex << bitmixer::bit_set<Bit0>::mask << std::endl;
+    std::cout << "Reset mask: 0x" << std::setfill('0') << std::setw(4) << std::hex << bitmixer::bit_reset<Bit0>::mask << std::endl;
+    std::cout << "Extract mask: 0x" << std::setfill('0') << std::setw(4) << std::hex << bitmixer::bit_set<Bit2>::mask << std::endl;
+    std::cout << "Reset mask: 0x" << std::setfill('0') << std::setw(4) << std::hex << bitmixer::bit_reset<Bit2>::mask << std::endl;
+    std::cout << "Extract mask: 0x" << std::setfill('0') << std::setw(4) << std::hex << bitmixer::bit_set<Bit3, Bit0>::mask << std::endl;
+    std::cout << "Reset mask: 0x" << std::setfill('0') << std::setw(4) << std::hex << bitmixer::bit_reset<Bit3, Bit0>::mask << std::endl;
+    std::cout << "Extract mask: 0x" << std::setfill('0') << std::setw(4) << std::hex << bitmixer::bit_set<Bit15, Bit7, Bit0, Bit6>::mask << std::endl;
+    std::cout << "Reset mask: 0x" << std::setfill('0') << std::setw(4) << std::hex << bitmixer::bit_reset<Bit15, Bit7, Bit0, Bit6>::mask << std::endl;
+
+    bitmixer::bit_collector<u_int16_t, Bit15, Bit7, Bit0, Bit6> collector;
+
+    std::cout << "Value: 0x" << std::setfill('0') << std::setw(4) << std::hex << collector.value() << std::endl;
+    collector.add(1);
+    std::cout << "Value: 0x" << std::setfill('0') << std::setw(4) << std::hex << collector.value() << std::endl;
+    collector.add(1);
+    std::cout << "Value: 0x" << std::setfill('0') << std::setw(4) << std::hex << collector.value() << std::endl;
+    collector.add(1);
+    std::cout << "Value: 0x" << std::setfill('0') << std::setw(4) << std::hex << collector.value() << std::endl;
+    collector.add(1);
+    std::cout << "Value: 0x" << std::setfill('0') << std::setw(4) << std::hex << collector.value() << std::endl;
+
+    return 0;
+}
+
+void testStepMachine() {
     step_machine stepMachine;
 
     main_step_buffer buffer;
     main_step_buffer_iterator_factory factory(buffer);
 
-    stepMachine.put(velocity_vector(1.0, 2.0, 3.0));
-    stepMachine.put(velocity_vector(2.0, 3.0, 4.0));
-    stepMachine.put(velocity_vector(3.0, 4.0, 5.0));
-    stepMachine.put(velocity_vector(4.0, 5.0, 6.0));
-    stepMachine.put(velocity_vector(4.0, 5.0, 6.0));
-    stepMachine.put(velocity_vector(4.0, 5.0, 6.0));
-    stepMachine.put(velocity_vector(4.0, 5.0, 6.0));
-    stepMachine.put(velocity_vector(4.0, 5.0, 6.0));
-    stepMachine.put(velocity_vector(3.0, 4.0, 5.0));
-    stepMachine.put(velocity_vector(2.0, 3.0, 4.0));
-    stepMachine.put(velocity_vector(1.0, 2.0, 3.0));
+    stepMachine.put(velocity_vector(1.0f, 2.0f, 3.0f));
+    stepMachine.put(velocity_vector(2.0f, 3.0f, 4.0f));
+    stepMachine.put(velocity_vector(3.0f, 4.0f, 5.0f));
+    stepMachine.put(velocity_vector(4.0f, 5.0f, 6.0f));
+    stepMachine.put(velocity_vector(4.0f, 5.0f, 6.0f));
+    stepMachine.put(velocity_vector(4.0f, 5.0f, 6.0f));
+    stepMachine.put(velocity_vector(4.0f, 5.0f, 6.0f));
+    stepMachine.put(velocity_vector(4.0f, 5.0f, 6.0f));
+    stepMachine.put(velocity_vector(3.0f, 4.0f, 5.0f));
+    stepMachine.put(velocity_vector(2.0f, 3.0f, 4.0f));
+    stepMachine.put(velocity_vector(1.0f, 2.0f, 3.0f));
     stepMachine.generate_next_move(factory.create());
     stepMachine.generate_next_move(factory.create());
     stepMachine.generate_next_move(factory.create());
@@ -62,8 +94,6 @@ int main() {
     stepMachine.generate_next_move(factory.create());
     stepMachine.generate_next_move(factory.create());
     stepMachine.generate_next_move(factory.create());
-
-    return 0;
 }
 
 void testRingBuffer() {
