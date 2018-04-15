@@ -34,13 +34,18 @@ namespace bitmixer {
         constexpr static T mask = ~bit_set_t<T, Bits...>::mask;
     };
 
-    template <typename T, bit_name ... Bits>
+    template <typename T, size_t Preserve, bit_name ... Bits>
     class bit_collector {
             T result;
             T const bits[sizeof...(Bits)] = {bit_set_t<T, Bits>::mask...};
             int index;
+            T preserve_mask;
         public:
-            bit_collector():result(0),index(0) {}
+            bit_collector():result(0),index(0) {
+                for(int i = 0; i < Preserve; i++) {
+                    preserve_mask |= bits[i];
+                }
+            }
 
             ~bit_collector() = default;
 
@@ -56,11 +61,21 @@ namespace bitmixer {
                 return result;
             }
 
-            T reset(const int start, const T mask) {
-                result &= mask;
-                index = start;
-                return result;
+            T reset() {
+                result &= preserve_mask;
+                index = Preserve;
             }
+
+            T clear() {
+                result = 0;
+                index = 0;
+            }
+
+//            T reset(const int start, const T mask) {
+//                result &= mask;
+//                index = start;
+//                return result;
+//            }
     };
 }
 

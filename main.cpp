@@ -53,12 +53,12 @@ void testStepMachine() {
     main_step_buffer_iterator_factory factory(buffer);
 
     stepper.put(velocity_vector(1.0f, 2.0f, 3.0f));
-    stepper.put(velocity_vector(2.0f, 4.0f, 6.0f));
-    stepper.put(velocity_vector(1.0f, 2.0f, 3.0f));
-    stepper.put(velocity_vector(0.0f, 0.0f, 0.0f));
-    stepper.put(velocity_vector(-1.0f, 2.0f, -3.0f));
-    stepper.put(velocity_vector(-2.0f, 4.0f, -6.0f));
-    stepper.put(velocity_vector(-1.0f, 2.0f, -3.0f));
+//    stepper.put(velocity_vector(2.0f, 4.0f, 6.0f));
+//    stepper.put(velocity_vector(1.0f, 2.0f, 3.0f));
+//    stepper.put(velocity_vector(0.0f, 0.0f, 0.0f));
+//    stepper.put(velocity_vector(-1.0f, 2.0f, -3.0f));
+//    stepper.put(velocity_vector(-2.0f, 4.0f, -6.0f));
+    stepper.put(velocity_vector(-1.0f, -2.0f, -3.0f));
     stepper.put(velocity_vector(0.0f, 0.0f, 0.0f));
 
     stepper.generate_next_move(factory.create());
@@ -66,10 +66,11 @@ void testStepMachine() {
     stepper.generate_next_move(factory.create());
     stepper.generate_next_move(factory.create());
     stepper.generate_next_move(factory.create());
-    stepper.generate_next_move(factory.create());
-    stepper.generate_next_move(factory.create());
-    stepper.generate_next_move(factory.create());
-    stepper.generate_next_move(factory.create());
+//    stepper.generate_next_move(factory.create());
+//    stepper.generate_next_move(factory.create());
+//    stepper.generate_next_move(factory.create());
+//    stepper.generate_next_move(factory.create());
+//    stepper.generate_next_move(factory.create());
 //    std::cout << "Machine position: " << stepper.position() << std::endl;
 //    std::cout << "Machine position: " << stepper.position() << std::endl;
 //    std::cout << "Machine position: " << stepper.position() << std::endl;

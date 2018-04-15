@@ -23,9 +23,13 @@ class short_vector {
         short_vector():data{} {
         }
 
-        explicit short_vector(ElementType initialValue) {
-            std::fill_n(std::begin(data), Size, initialValue);
-        }
+//        short_vector(ElementType initialValue) {
+//            std::fill_n(std::begin(data), Size, initialValue);
+//        }
+
+//        void fill(ElementType initialValue) {
+//            std::fill_n(std::begin(data), Size, initialValue);
+//        }
 
         template <typename ... Args>
         explicit short_vector(Args ... args): data{ElementType(args) ...} {
@@ -67,6 +71,13 @@ class short_vector {
                            std::begin(data),
                            [=] (ElementType value) { return ElementType(value / scaleFactor);});
         }
+
+//        short_vector& operator/= (const SelfType& other) {
+//            for (int i = 0; i < Size; ++i) {
+//                (other.data == 0) ? data[i] = 0 : data[i] / other.data[i];
+//            }
+//            return *this;
+//        }
 
         short_vector& operator+= (const SelfType other) {
             for (int i = 0; i < Size; ++i) {
@@ -137,8 +148,8 @@ class short_vector {
             return data[idx];
         }
 
-        template <typename T, bit_name ... Bits>
-        bitmixer::bit_collector<T, Bits...>& step_and_reset(size_t mask, bitmixer::bit_collector<T, Bits...>& collector) {
+        template <typename T, size_t S, bit_name ... Bits>
+        bitmixer::bit_collector<T, S, Bits...>& step_and_reset(size_t mask, bitmixer::bit_collector<T, S, Bits...>& collector) {
             for (int i = 0; i < Size; ++i) {
                 collector.add(data[i] & ~mask);
                 data[i] &= mask;
@@ -146,8 +157,8 @@ class short_vector {
             return collector;
         }
 
-        template <typename T, bit_name ... Bits>
-        void abs(bitmixer::bit_collector<T, Bits...>& collector) {
+        template <typename T, size_t S, bit_name ... Bits>
+        void abs(bitmixer::bit_collector<T, S, Bits...>& collector) {
             for (int i = 0; i < Size; ++i) {
                 collector.add(data[i] < 0);
                 data[i] = std::abs(data[i]);

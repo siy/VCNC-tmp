@@ -15,6 +15,7 @@ class step_machine {
         step_vector current_speed;
         step_vector step_counter;
         step_vector next_delta;
+        step_vector prev_speed;
 
         step_bit_collector step_bits;
 
@@ -58,11 +59,15 @@ class step_machine {
                 callback(machine_location);
             }
 
+            //TODO: fix calculation of number of steps
             step_vector next_speed = get();
             next_delta = next_speed;
-            next_delta >>= SUBSTEPS_POWER;
+            next_delta += prev_speed;
+            next_delta >>= 1;
 
-            step_bits.reset(0, 0);
+            prev_speed = next_speed;
+
+            step_bits.clear();
             next_speed.abs(step_bits);
 
             step_vector delta_speed = next_speed;
@@ -75,7 +80,7 @@ class step_machine {
                 step_counter += current_speed;
 
                 *iterator++ = step_counter.step_and_reset(SUBSTEPS_MASK, step_bits).value();
-                *iterator++ = step_bits.reset(NUM_AXES, step_bit_mask);
+                *iterator++ = step_bits.reset();
             }
         }
 };

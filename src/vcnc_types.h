@@ -36,7 +36,6 @@ using main_step_buffer_iterator_factory = main_step_buffer::iterator_factory<bit
 // Step X, Step Y, Step Z
 // Pwm 1, Pwm 2
 // Listed bits specify actual physical positions of corresponding logical signals
-using step_bit_collector = bitmixer::bit_collector<bitvector, Bit1, Bit3, Bit5, Bit0, Bit2, Bit4, Bit6, Bit7>;
-// Listed bits must be the same as for declaration above for step bits, i.e. copy of first NUM_AXIS elements.
-constexpr const bitvector step_bit_mask = bitmixer::bit_set_t<bitvector, Bit1, Bit3, Bit5>::mask;
+using step_bit_collector = bitmixer::bit_collector<bitvector, NUM_AXES, Bit1, Bit3, Bit5, Bit0, Bit2, Bit4, Bit6, Bit7>;
+
 #endif //VCNC_VCNC_TYPES_H
