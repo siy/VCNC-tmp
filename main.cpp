@@ -1,6 +1,8 @@
 #include <iostream>
+#include <bitset>
 
 #include "src/vcnc_types.h"
+#include "src/move_block.h"
 #include "src/step_machine.h"
 #include "src/bitmixer.h"
 //---------------------------------------------------------------------
@@ -43,38 +45,34 @@ int main() {
 }
 
 void testStepMachine() {
-    step_machine stepMachine;
+    step_machine stepper([] (physical_location& loc) {
+        std::cout << "Machine position: " << loc << std::endl;
+    });
 
     main_step_buffer buffer;
     main_step_buffer_iterator_factory factory(buffer);
 
-    stepMachine.put(velocity_vector(1.0f, 2.0f, 3.0f));
-    stepMachine.put(velocity_vector(2.0f, 3.0f, 4.0f));
-    stepMachine.put(velocity_vector(3.0f, 4.0f, 5.0f));
-    stepMachine.put(velocity_vector(4.0f, 5.0f, 6.0f));
-    stepMachine.put(velocity_vector(4.0f, 5.0f, 6.0f));
-    stepMachine.put(velocity_vector(4.0f, 5.0f, 6.0f));
-    stepMachine.put(velocity_vector(4.0f, 5.0f, 6.0f));
-    stepMachine.put(velocity_vector(4.0f, 5.0f, 6.0f));
-    stepMachine.put(velocity_vector(3.0f, 4.0f, 5.0f));
-    stepMachine.put(velocity_vector(2.0f, 3.0f, 4.0f));
-    stepMachine.put(velocity_vector(1.0f, 2.0f, 3.0f));
-    stepMachine.generate_next_move(factory.create());
-    stepMachine.generate_next_move(factory.create());
-    stepMachine.generate_next_move(factory.create());
-    stepMachine.generate_next_move(factory.create());
-    stepMachine.generate_next_move(factory.create());
-    stepMachine.generate_next_move(factory.create());
-    stepMachine.generate_next_move(factory.create());
-    stepMachine.generate_next_move(factory.create());
-    stepMachine.generate_next_move(factory.create());
-    stepMachine.generate_next_move(factory.create());
-    stepMachine.generate_next_move(factory.create());
-    stepMachine.generate_next_move(factory.create());
-    stepMachine.generate_next_move(factory.create());
-    stepMachine.generate_next_move(factory.create());
-    stepMachine.generate_next_move(factory.create());
-    stepMachine.generate_next_move(factory.create());
+    stepper.put(velocity_vector(1.0f, 2.0f, 3.0f));
+    stepper.put(velocity_vector(2.0f, 4.0f, 6.0f));
+    stepper.put(velocity_vector(1.0f, 2.0f, 3.0f));
+    stepper.put(velocity_vector(0.0f, 0.0f, 0.0f));
+    stepper.put(velocity_vector(-1.0f, 2.0f, -3.0f));
+    stepper.put(velocity_vector(-2.0f, 4.0f, -6.0f));
+    stepper.put(velocity_vector(-1.0f, 2.0f, -3.0f));
+    stepper.put(velocity_vector(0.0f, 0.0f, 0.0f));
+
+    stepper.generate_next_move(factory.create());
+    stepper.generate_next_move(factory.create());
+    stepper.generate_next_move(factory.create());
+    stepper.generate_next_move(factory.create());
+    stepper.generate_next_move(factory.create());
+    stepper.generate_next_move(factory.create());
+    stepper.generate_next_move(factory.create());
+    stepper.generate_next_move(factory.create());
+    stepper.generate_next_move(factory.create());
+//    std::cout << "Machine position: " << stepper.position() << std::endl;
+//    std::cout << "Machine position: " << stepper.position() << std::endl;
+//    std::cout << "Machine position: " << stepper.position() << std::endl;
 }
 
 void testBitMixer() {

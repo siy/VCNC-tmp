@@ -10,13 +10,16 @@
 class step_machine {
         step_vector const ZeroVector;
 
-        step_vector_filter filter;
         step_vector_queue queue;
 
         step_vector current_speed;
         step_vector step_counter;
+        step_vector next_delta;
 
         step_bit_collector step_bits;
+
+        physical_location machine_location;
+        position_callback callback = nullptr;
 
         step_vector get() {
             return queue.empty() ? ZeroVector : queue.get();
@@ -24,6 +27,7 @@ class step_machine {
 
     public:
         step_machine() = default;
+        explicit step_machine(position_callback entry_point):callback(entry_point) {}
 
         inline bool has_space() {
             return queue.empty();
@@ -39,13 +43,31 @@ class step_machine {
             return true;
         }
 
+        physical_location& position() {
+            return machine_location;
+        }
+
+        void set_callback(position_callback entry_point) {
+            callback = entry_point;
+        }
+
         void generate_next_move(main_step_buffer_iterator iterator) {
-            step_vector next_speed = filter.next(get());
+            machine_location += next_delta;
+
+            if (callback) {
+                callback(machine_location);
+            }
+
+            step_vector next_speed = get();
+            next_delta = next_speed;
+            next_delta >>= SUBSTEPS_POWER;
+
             step_bits.reset(0, 0);
             next_speed.abs(step_bits);
 
             step_vector delta_speed = next_speed;
             delta_speed -= current_speed;
+
             delta_speed >>= STEP_BUFFER_SIZE_POWER;
 
             while (iterator.hasNext()) {
@@ -53,7 +75,7 @@ class step_machine {
                 step_counter += current_speed;
 
                 *iterator++ = step_counter.step_and_reset(SUBSTEPS_MASK, step_bits).value();
-                *iterator++ = step_bits.reset(NUM_AXES, ~step_bit_mask);
+                *iterator++ = step_bits.reset(NUM_AXES, step_bit_mask);
             }
         }
 };

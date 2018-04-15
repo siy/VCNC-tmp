@@ -52,16 +52,6 @@ namespace bitmixer {
                 return *this;
             }
 
-//            template <typename T, size_t Len>
-//            bit_collector& add(T value) {
-//                using mask = bit_set_t<T, bit_name(Len)>;
-//                auto bit_mask = mask::mask;
-//                while (bit_mask) {
-//                    add(value & bit_mask);
-//                    bit_mask >>= 1;
-//                }
-//            }
-
             T value () const {
                 return result;
             }

@@ -19,9 +19,6 @@ constexpr size_t const SUBSTEPS_POWER = 10;
 constexpr size_t const SUBSTEPS = 1u << SUBSTEPS_POWER;
 constexpr size_t const SUBSTEPS_MASK = SUBSTEPS - 1;
 
-constexpr size_t const OUT_BIT_DISTANCE = 1;
-constexpr size_t const DIR_BIT_SHIFT = 1;
-
 class machine_parameters {
         float leadscrew_pitch = 10.0;
         u_int16_t steps_per_pitch = 200;
