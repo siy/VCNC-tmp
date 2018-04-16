@@ -20,27 +20,25 @@ class short_vector {
 
         using SelfType = short_vector<ElementType, Size>;
 
-        short_vector():data{} {
+        short_vector() noexcept : data{} {
         }
-
-//        short_vector(ElementType initialValue) {
-//            std::fill_n(std::begin(data), Size, initialValue);
-//        }
-
-//        void fill(ElementType initialValue) {
-//            std::fill_n(std::begin(data), Size, initialValue);
-//        }
 
         template <typename ... Args>
-        explicit short_vector(Args ... args): data{ElementType(args) ...} {
+        explicit short_vector(Args ... args) noexcept : data{ElementType(args) ...}  {
         }
 
-        short_vector(const SelfType& other) {
+        short_vector(const SelfType& other) noexcept {
             std::copy(std::begin(other.data), std::end(other.data), std::begin(data));
         }
 
         short_vector(const SelfType&& other) noexcept {
             std::copy(std::begin(other.data), std::end(other.data), std::begin(data));
+        }
+
+        short_vector(const SelfType& first, SelfType& second, size_t shift) noexcept {
+            for (int i = 0; i < Size; ++i) {
+                data[i] = (first.data[i] - second.data[i]) >> shift;
+            }
         }
 
         short_vector& operator= (const SelfType& other) {
