@@ -13,6 +13,7 @@ class step_machine {
         step_vector_queue queue;
 
         step_vector current_speed;
+        step_vector prev_speed;
         step_vector step_counter;
         step_vector next_delta;
 
@@ -55,7 +56,7 @@ class step_machine {
             callback = entry_point;
         }
 
-        step_buffer& buffer() {
+        main_step_buffer buffer() {
             return main_buffer;
         }
 
@@ -74,48 +75,20 @@ class step_machine {
             delta_speed /= 2;
 
             step_bits.clear();
-            //next_speed.sign(step_bits);
 
             next_delta = ZeroVector;
 
             main_step_buffer_iterator iterator = factory.create();
-            int cnt_1 = 0;
-            int cnt_2 = 0;
-            int cnt_3 = 0;
-
-            std::cout << "Delta speed: " << delta_speed << std::endl;
-            std::cout << "Step counter: " << step_counter << std::endl;
 
             while (iterator.hasNext()) {
-                //current_speed += delta_speed;
-                //step_counter.add_abs(current_speed);
-
-                //next_delta += current_speed;
-
                 step_counter.add_abs(delta_speed);
                 next_delta += delta_speed;
 
-                //*iterator++ = step_counter.step_and_reset(SUBSTEPS_MASK, step_bits).value();
-                auto val = step_counter.step_and_reset(SUBSTEPS_MASK, step_bits).value();
-
-                if (val & 0x08) {
-                    cnt_1++;
-                }
-                if (val & 0x10) {
-                    cnt_2++;
-                }
-                if (val & 0x20) {
-                    cnt_3++;
-                }
-
-                *iterator++ = val;
+                *iterator++ = step_counter.step_and_reset(SUBSTEPS_MASK, step_bits).value();
                 *iterator++ = step_bits.reset();
             }
 
             current_speed = next_speed;
-
-            std::cout << "Next delta: " << next_delta << std::endl;
-            std::cout << "Cnt: " << cnt_1 << ", " << cnt_2 << ", " << cnt_3 << std::endl;
         }
 };
 

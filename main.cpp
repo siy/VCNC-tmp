@@ -49,13 +49,15 @@ void testStepMachine() {
         std::cout << "Machine position: " << loc << std::endl;
     });
 
-    stepper.put(velocity_vector(100.0f, 200.0f, 300.0f));
+    stepper.put(velocity_vector(1000.0f, 2000.0f, 3072.0f));
+//    stepper.put(velocity_vector(100.0f, 200.0f, 300.0f));
 //    stepper.put(velocity_vector(2.0f, 4.0f, 6.0f));
 //    stepper.put(velocity_vector(1.0f, 2.0f, 3.0f));
-    stepper.put(velocity_vector(0.0f, 0.0f, 0.0f));
+//    stepper.put(velocity_vector(300.0f, 200.0f, 100.0f));
 //    stepper.put(velocity_vector(-1.0f, 2.0f, -3.0f));
 //    stepper.put(velocity_vector(-2.0f, 4.0f, -6.0f));
-    stepper.put(velocity_vector(-100.0f, -200.0f, -300.0f));
+//    stepper.put(velocity_vector(-300.0f, -200.0f, -100.0f));
+    stepper.put(velocity_vector(-1000.0f, -2000.0f, -3072.0f));
     stepper.put(velocity_vector(0.0f, 0.0f, 0.0f));
 
     stepper.generate_next_move();
@@ -63,19 +65,11 @@ void testStepMachine() {
     stepper.generate_next_move();
     stepper.generate_next_move();
     stepper.generate_next_move();
+    stepper.generate_next_move();
 
-    std::cout << "(F100.0 * Ti * scale) = " << (100.0f * INTERPOLATION_INTERVAL * Parameters.scale()/2) << std::endl;
-    std::cout << "(F200.0 * Ti * scale) = " << (200.0f * INTERPOLATION_INTERVAL * Parameters.scale()/2) << std::endl;
-    std::cout << "(F300.0 * Ti * scale) = " << (300.0f * INTERPOLATION_INTERVAL * Parameters.scale()/2) << std::endl;
-
-//    stepper.generate_next_move(factory.create());
-//    stepper.generate_next_move(factory.create());
-//    stepper.generate_next_move(factory.create());
-//    stepper.generate_next_move(factory.create());
-//    stepper.generate_next_move(factory.create());
-//    std::cout << "Machine position: " << stepper.position() << std::endl;
-//    std::cout << "Machine position: " << stepper.position() << std::endl;
-//    std::cout << "Machine position: " << stepper.position() << std::endl;
+    std::cout << "(F100.0 * Ti * scale) = " << (1000.0f * INTERPOLATION_INTERVAL * Parameters.scale()/2) << std::endl;
+    std::cout << "(F200.0 * Ti * scale) = " << (2000.0f * INTERPOLATION_INTERVAL * Parameters.scale()/2) << std::endl;
+    std::cout << "(F300.0 * Ti * scale) = " << (3072.0f * INTERPOLATION_INTERVAL * Parameters.scale()/2) << std::endl;
 }
 
 void testBitMixer() {
