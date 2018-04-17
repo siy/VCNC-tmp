@@ -68,11 +68,11 @@ class step_machine {
                 callback(position());
             }
 
-            step_vector next_speed = get();
-            step_vector delta_speed = next_speed;
+            current_speed = prev_speed;
+            prev_speed = get();
 
-            delta_speed += current_speed;
-            delta_speed /= 2;
+            current_speed += prev_speed;
+            current_speed /= 2;
 
             step_bits.clear();
 
@@ -81,14 +81,12 @@ class step_machine {
             main_step_buffer_iterator iterator = factory.create();
 
             while (iterator.hasNext()) {
-                step_counter.add_abs(delta_speed);
-                next_delta += delta_speed;
+                step_counter.add_abs(current_speed);
+                next_delta += current_speed;
 
                 *iterator++ = step_counter.step_and_reset(SUBSTEPS_MASK, step_bits).value();
                 *iterator++ = step_bits.reset();
             }
-
-            current_speed = next_speed;
         }
 };
 
