@@ -49,23 +49,23 @@ void testStepMachine() {
         std::cout << "Machine position: " << loc << std::endl;
     });
 
-    main_step_buffer buffer;
-    main_step_buffer_iterator_factory factory(buffer);
-
-    stepper.put(velocity_vector(1.0f, 2.0f, 3.0f));
+    stepper.put(velocity_vector(100.0f, 200.0f, 300.0f));
 //    stepper.put(velocity_vector(2.0f, 4.0f, 6.0f));
 //    stepper.put(velocity_vector(1.0f, 2.0f, 3.0f));
-//    stepper.put(velocity_vector(0.0f, 0.0f, 0.0f));
+    stepper.put(velocity_vector(0.0f, 0.0f, 0.0f));
 //    stepper.put(velocity_vector(-1.0f, 2.0f, -3.0f));
 //    stepper.put(velocity_vector(-2.0f, 4.0f, -6.0f));
-    stepper.put(velocity_vector(-1.0f, -2.0f, -3.0f));
+    stepper.put(velocity_vector(-100.0f, -200.0f, -300.0f));
     stepper.put(velocity_vector(0.0f, 0.0f, 0.0f));
 
-    stepper.generate_next_move(factory.create());
-    stepper.generate_next_move(factory.create());
-    stepper.generate_next_move(factory.create());
-    stepper.generate_next_move(factory.create());
-    stepper.generate_next_move(factory.create());
+    stepper.generate_next_move();
+    stepper.generate_next_move();
+    stepper.generate_next_move();
+    stepper.generate_next_move();
+    stepper.generate_next_move();
+
+    std::cout << "F100.0 * Ti * scale " << (100.0f * INTERPOLATION_INTERVAL * Parameters.scale()) << std::endl;
+
 //    stepper.generate_next_move(factory.create());
 //    stepper.generate_next_move(factory.create());
 //    stepper.generate_next_move(factory.create());

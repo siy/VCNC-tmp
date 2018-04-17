@@ -8,6 +8,8 @@
 #ifndef VCNC_PARAMETERS_H
 #define VCNC_PARAMETERS_H
 
+constexpr float const INTERPOLATION_INTERVAL = 1e-3; //1ms
+
 constexpr size_t const NUM_AXES = 3;
 constexpr size_t const FILTER_ORDER = 4;
 constexpr size_t const VELOCITY_VECTOR_QUEUE_SIZE = 16;

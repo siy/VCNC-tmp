@@ -70,12 +70,6 @@ namespace bitmixer {
                 result = 0;
                 index = 0;
             }
-
-//            T reset(const int start, const T mask) {
-//                result &= mask;
-//                index = start;
-//                return result;
-//            }
     };
 }
 
