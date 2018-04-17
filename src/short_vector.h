@@ -95,13 +95,13 @@ class short_vector {
             return *this;
         }
 
-//        template <typename T>
-//        SelfType& operator>>= (const T count) noexcept {
-//            for (int i = 0; i < Size; ++i) {
-//                data[i] >>= count;
-//            }
-//            return *this;
-//        }
+        template <typename T>
+        SelfType& operator>>= (const T count) noexcept {
+            for (int i = 0; i < Size; ++i) {
+                data[i] >>= count;
+            }
+            return *this;
+        }
 //
 //        template <typename T>
 //        SelfType& operator&= (const T mask) noexcept {

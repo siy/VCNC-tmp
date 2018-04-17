@@ -70,8 +70,17 @@ namespace bitmixer {
                 result = 0;
                 index = 0;
             }
+
+            template <typename Tp, size_t P, bit_name ... Bitsp>
+            friend std::ostream& operator<< (std::ostream& os, const bit_collector<Tp, P, Bitsp...>& vec);
     };
 }
+template <typename T, size_t P, bit_name ... Bits>
+std::ostream& operator<< (std::ostream& os, const bitmixer::bit_collector<T, P, Bits...>& vec) {
+    std::bitset<std::numeric_limits<T>::digits> val(vec.value());
+    os << "<" << val << ">";
+    return os;
+};
 
 
 #endif //VCNC_MAIN_BITMIXER_H

@@ -64,7 +64,9 @@ void testStepMachine() {
     stepper.generate_next_move();
     stepper.generate_next_move();
 
-    std::cout << "F100.0 * Ti * scale " << (100.0f * INTERPOLATION_INTERVAL * Parameters.scale()) << std::endl;
+    std::cout << "(F100.0 * Ti * scale) = " << (100.0f * INTERPOLATION_INTERVAL * Parameters.scale()/2) << std::endl;
+    std::cout << "(F200.0 * Ti * scale) = " << (200.0f * INTERPOLATION_INTERVAL * Parameters.scale()/2) << std::endl;
+    std::cout << "(F300.0 * Ti * scale) = " << (300.0f * INTERPOLATION_INTERVAL * Parameters.scale()/2) << std::endl;
 
 //    stepper.generate_next_move(factory.create());
 //    stepper.generate_next_move(factory.create());

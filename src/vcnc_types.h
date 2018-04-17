@@ -23,7 +23,7 @@ using velocity_vector = short_vector<float, NUM_AXES>;
 using normalised_velocity_vector = velocity_vector;
 
 using step_vector = short_vector<substep, NUM_AXES>;
-using step_vector_filter = moving_average<step_vector, FILTER_ORDER>;
+using step_vector_filter = moving_average<step_vector, FILTER_SIZE>;
 using step_vector_queue = ring_buffer<step_vector, VELOCITY_VECTOR_QUEUE_SIZE>;
 
 using main_step_buffer = step_buffer<bitvector, STEP_BUFFER_SIZE>;
@@ -36,6 +36,7 @@ using main_step_buffer_iterator_factory = main_step_buffer::iterator_factory<bit
 // Step X, Step Y, Step Z
 // Pwm 1, Pwm 2
 // Listed bits specify actual physical positions of corresponding logical signals
-using step_bit_collector = bitmixer::bit_collector<bitvector, NUM_AXES, Bit1, Bit3, Bit5, Bit0, Bit2, Bit4, Bit6, Bit7>;
+//using step_bit_collector = bitmixer::bit_collector<bitvector, NUM_AXES, Bit1, Bit3, Bit5, Bit0, Bit2, Bit4, Bit6, Bit7>;
+using step_bit_collector = bitmixer::bit_collector<bitvector, NUM_AXES, Bit0, Bit1, Bit2, Bit3, Bit4, Bit5, Bit6, Bit7>;
 
 #endif //VCNC_VCNC_TYPES_H
