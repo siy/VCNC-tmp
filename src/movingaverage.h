@@ -27,7 +27,9 @@ class moving_average {
             accumulator -= old;
             accumulator += element;
 
-            return last_value = (accumulator / Size);
+            last_value = accumulator;
+
+            return last_value /= Size;
         }
 
         inline ElementType prev() const {

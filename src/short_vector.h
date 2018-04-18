@@ -6,7 +6,6 @@
 #include <utility>
 #include <cassert>
 #include <algorithm>
-#include <iostream>
 #include "bitmixer.h"
 
 #ifndef VCNC_VEC_H
@@ -103,24 +102,6 @@ class short_vector {
             return *this;
         }
 
-        template <typename ScalerType>
-        SelfType operator/ (const ScalerType other) noexcept {
-            SelfType result(*this);
-            for (int i = 0; i < Size; ++i) {
-                result.data[i] /= other;
-            }
-            return result;
-        }
-
-        template <typename ScalerType>
-        SelfType operator* (const ScalerType other) noexcept {
-            SelfType result(*this);
-            for (int i = 0; i < Size; ++i) {
-                result.data[i] *= other;
-            }
-            return result;
-        }
-
         template <typename T, size_t MASK>
         T& step_and_reset(T& collector) {
             for (int i = 0; i < Size; ++i) {
@@ -134,7 +115,6 @@ class short_vector {
         void sign(bitmixer::bit_collector<T, S, Bits...>& collector) {
             for (int i = 0; i < Size; ++i) {
                 collector.add(data[i] < 0);
-                //data[i] = std::abs(data[i]);
             }
         }
 

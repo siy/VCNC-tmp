@@ -12,7 +12,6 @@ class step_machine {
 
         step_vector_queue queue;
 
-        //step_vector current_speed;
         step_vector next_speed;
         step_vector step_counter;
         step_vector next_position_change;
@@ -48,7 +47,7 @@ class step_machine {
 
         physical_location& position() {
             scaled_position = machine_location;
-            scaled_position /= SUBSTEPS;
+            scaled_position /= STEP_BUFFER_SIZE;
             return scaled_position;
         }
 
@@ -72,7 +71,7 @@ class step_machine {
 
             next_position_change = next_speed;
             next_position_change += current_speed;
-            next_position_change *= SUBSTEPS/2;
+            next_position_change *= (STEP_BUFFER_SIZE/2);
 
             step_vector speed_delta = next_speed;
             speed_delta -= current_speed;
