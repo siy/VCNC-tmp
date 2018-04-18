@@ -12,10 +12,10 @@ class step_machine {
 
         step_vector_queue queue;
 
-        step_vector current_speed;
-        step_vector prev_speed;
+        //step_vector current_speed;
+        step_vector next_speed;
         step_vector step_counter;
-        step_vector next_delta;
+        step_vector next_position_change;
 
         step_bit_collector step_bits;
 
@@ -60,31 +60,35 @@ class step_machine {
             return main_buffer;
         }
 
-        //TODO: update implementation to support smooth speed transition, current implementation uses avarage speed
         void generate_next_move() {
-            machine_location += next_delta;
+            machine_location += next_position_change;
 
             if (callback) {
                 callback(position());
             }
 
-            current_speed = prev_speed;
-            prev_speed = get();
+            step_vector current_speed = next_speed;
+            next_speed = get();
 
-            current_speed += prev_speed;
-            current_speed /= 2;
+            next_position_change = next_speed;
+            next_position_change += current_speed;
+            next_position_change *= SUBSTEPS/2;
+
+            step_vector speed_delta = next_speed;
+            speed_delta -= current_speed;
+
+            current_speed *= STEP_BUFFER_SIZE;
 
             step_bits.clear();
-
-            next_delta = ZeroVector;
+            next_speed.sign(step_bits);
 
             main_step_buffer_iterator iterator = factory.create();
 
             while (iterator.hasNext()) {
+                current_speed += speed_delta;
                 step_counter.add_abs(current_speed);
-                next_delta += current_speed;
 
-                *iterator++ = step_counter.step_and_reset(SUBSTEPS_MASK, step_bits).value();
+                *iterator++ = step_counter.step_and_reset<step_bit_collector, SUBSTEPS_DELTA_MASK>(step_bits).value();
                 *iterator++ = step_bits.reset();
             }
         }

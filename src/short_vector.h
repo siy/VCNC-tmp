@@ -36,21 +36,21 @@ class short_vector {
         }
 
         template <size_t Scaler>
-        SelfType& scaled_difference(const SelfType& other) noexcept {
+        short_vector& scaled_difference(const SelfType& other) noexcept {
             for (int i = 0; i < Size; ++i) {
                 data[i] = (data[i] - other.data[i]) / Scaler;
             }
             return *this;
         }
 
-        SelfType& add_abs(const SelfType& other) noexcept {
+        short_vector& add_abs(const SelfType& other) noexcept {
             for (int i = 0; i < Size; ++i) {
                 data[i] += std::abs(other.data[i]);
             }
             return *this;
         }
 
-        SelfType& operator= (const SelfType& other) noexcept {
+        short_vector& operator= (const SelfType& other) noexcept {
             std::copy(std::begin(other.data), std::end(other.data), std::begin(data));
             return *this;
         }
@@ -64,7 +64,7 @@ class short_vector {
         }
 
         template <typename ScalerType>
-        SelfType& operator*= (ScalerType scaleFactor) noexcept {
+        short_vector& operator*= (ScalerType scaleFactor) noexcept {
             std::transform(std::begin(data),
                            std::end(data),
                            std::begin(data),
@@ -73,7 +73,7 @@ class short_vector {
         }
 
         template <typename ScalerType>
-        SelfType& operator/= (const ScalerType scaleFactor) noexcept {
+        short_vector& operator/= (const ScalerType scaleFactor) noexcept {
             std::transform(std::begin(data),
                            std::end(data),
                            std::begin(data),
@@ -81,14 +81,14 @@ class short_vector {
             return *this;
         }
 
-        SelfType& operator+= (const SelfType other) noexcept {
+        short_vector& operator+= (const SelfType other) noexcept {
             for (int i = 0; i < Size; ++i) {
                 data[i] += other.data[i];
             }
             return *this;
         }
 
-        SelfType& operator-= (const SelfType other) noexcept {
+        short_vector& operator-= (const SelfType other) noexcept {
             for (int i = 0; i < Size; ++i) {
                 data[i] -= other.data[i];
             }
@@ -96,29 +96,13 @@ class short_vector {
         }
 
         template <typename T>
-        SelfType& operator>>= (const T count) noexcept {
+        short_vector& operator>>= (const T count) noexcept {
             for (int i = 0; i < Size; ++i) {
                 data[i] >>= count;
             }
             return *this;
         }
-//
-//        template <typename T>
-//        SelfType& operator&= (const T mask) noexcept {
-//            for (int i = 0; i < Size; ++i) {
-//                data[i] &= mask;
-//            }
-//            return *this;
-//        }
-//
-//        SelfType operator/ (const SelfType other) noexcept {
-//            SelfType result(*this);
-//            for (int i = 0; i < Size; ++i) {
-//                result.data[i] /= other.data[i];
-//            }
-//            return result;
-//        }
-//
+
         template <typename ScalerType>
         SelfType operator/ (const ScalerType other) noexcept {
             SelfType result(*this);
@@ -127,15 +111,7 @@ class short_vector {
             }
             return result;
         }
-//
-//        SelfType operator* (const SelfType other) noexcept {
-//            SelfType result(*this);
-//            for (int i = 0; i < Size; ++i) {
-//                result.data[i] *= other.data[i];
-//            }
-//            return result;
-//        }
-//
+
         template <typename ScalerType>
         SelfType operator* (const ScalerType other) noexcept {
             SelfType result(*this);
@@ -144,17 +120,12 @@ class short_vector {
             }
             return result;
         }
-//
-//        const ElementType& operator[](int idx) noexcept {
-//            assert(idx < Size);
-//            return data[idx];
-//        }
 
-        template <typename T, size_t S, bit_name ... Bits>
-        bitmixer::bit_collector<T, S, Bits...>& step_and_reset(size_t mask, bitmixer::bit_collector<T, S, Bits...>& collector) {
+        template <typename T, size_t MASK>
+        T& step_and_reset(T& collector) {
             for (int i = 0; i < Size; ++i) {
-                collector.add(data[i] & ~mask);
-                data[i] &= mask;
+                collector.add(data[i] & ~MASK);
+                data[i] &= MASK;
             }
             return collector;
         }

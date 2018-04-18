@@ -19,7 +19,9 @@ constexpr float const INTERPOLATION_INTERVAL = 1.0f/float(STEP_BUFFER_SIZE); //1
 
 constexpr size_t const SUBSTEPS_POWER = 10;
 constexpr size_t const SUBSTEPS = 1u << SUBSTEPS_POWER;
-constexpr size_t const SUBSTEPS_MASK = SUBSTEPS - 1;
+
+constexpr size_t const SUBSTEPS_DELTA = 1u << (STEP_BUFFER_SIZE_POWER + SUBSTEPS_POWER);
+constexpr size_t const SUBSTEPS_DELTA_MASK = SUBSTEPS_DELTA - 1;
 
 class machine_parameters {
         float leadscrew_pitch = 10.0;
