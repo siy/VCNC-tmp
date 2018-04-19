@@ -8,7 +8,7 @@
 
 class interpolator {
         step_machine stepper;
-        velocity_filter filter;
+        step_vector_filter filter;
 
 };
 

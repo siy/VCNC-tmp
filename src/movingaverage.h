@@ -12,10 +12,9 @@ template <typename ElementType, size_t Size>
 class moving_average {
         ring_buffer<ElementType,Size> buffer;
         ElementType accumulator;
-        ElementType last_value;
     public:
 
-        moving_average():accumulator(ElementType(0)),last_value(ElementType(0)) {
+        moving_average():accumulator(ElementType(0)) {
             buffer.reset(ElementType(0), Size);
         }
 
@@ -27,13 +26,10 @@ class moving_average {
             accumulator -= old;
             accumulator += element;
 
-            last_value = accumulator;
+            old = accumulator;
+            old /= Size;
 
-            return last_value /= Size;
-        }
-
-        inline ElementType prev() const {
-            return last_value;
+            return old;
         }
 };
 
